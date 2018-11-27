@@ -4,6 +4,7 @@ import Ground from './objects/Ground';
 import Wave from './objects/Wave';
 import Block from './objects/Block';
 import Full2D from './ui/Full2D';
+import OrbitControls from './controls/OrbitControls';
 
 const TIMEOUT = 9000;
 const SERVERCONFIG = 60000;
@@ -119,9 +120,17 @@ export default class Game {
     }
 
     this.currentBlock = new Block(1, 2);
-    // this.currentBlock.glow();
     this.scene.add(this.currentBlock.obj);
 
+    var b2 = new Block(15, 2);
+    b2.obj.position.x += 20;
+    b2.glow();
+    this.scene.add(b2.obj);
+
+    var b3 = new Block(2, 1);
+    b3.obj.position.z += 20;
+    this.scene.add(b3.obj);
+    
     this.full2D = new Full2D({
       camera: this.camera,
       // -- 返回微信
@@ -135,6 +144,9 @@ export default class Game {
     })
 
     this.addLight();
+
+    this.orbitControls = new THREE.OrbitControls(this.camera);
+    this.orbitControls.userRotateSpeed = 10;
   }
 
   resetScene() {
@@ -187,14 +199,14 @@ export default class Game {
   }
 
   update(tt) {
-
+    this.orbitControls.update();
     // this.camera.translateX(-0.1);
 
     if (this.renderer.shadowMap.enabled) {
-      this.shadowTarget.position.x = this.bottle.obj.position.x;
-      this.shadowTarget.position.z = this.bottle.obj.position.z;
-      this.shadowLight.position.x = this.bottle.obj.position.x + 0;
-      this.shadowLight.position.z = this.bottle.obj.position.z + 10;
+      // this.shadowTarget.position.x = this.bottle.obj.position.x;
+      // this.shadowTarget.position.z = this.bottle.obj.position.z;
+      // this.shadowLight.position.x = this.bottle.obj.position.x + 0;
+      // this.shadowLight.position.z = this.bottle.obj.position.z + 10;
     }
 
     this.renderer.render(this.scene, this.camera);
